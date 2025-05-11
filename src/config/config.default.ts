@@ -11,4 +11,5 @@ export const DEFAULT_CONFIG: ConfigData = {
     FirebasePrivateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n') || "",
     FirebaseClientEmail: process.env.FIREBASE_CLIENT_EMAIL || "",
     FirebaseProjectId: process.env.FIREBASE_PROJECT_ID || "",
+    MONGO_DB_URI: process.env.MONGO_DB_URI || ""
 }   

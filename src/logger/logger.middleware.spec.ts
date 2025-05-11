@@ -94,7 +94,7 @@ describe("generateLogMessage", () => {
             getHeader: jest.fn().mockReturnValue(100)
         } as unknown as Response;
         const timeTaken = 1000;
-        const logMessage = middleware.generateLogMessage(mockRequest, mockResponse,timeTaken);
+        const logMessage = (middleware as any).generateLogMessage(mockRequest, mockResponse,timeTaken);
         const expectedDate = moment().format('DD/MMM/YYYY:HH:mm:ss ZZ');
         expect(logMessage).toContain('127.0.0.1');
         expect(logMessage).toContain('-');
@@ -109,4 +109,24 @@ describe("generateLogMessage", () => {
         
 
 })
+it("should handle missing headers gracefully", () => {
+    const mockRequest = {
+        socket: { remoteAddress: '127.0.0.1' },
+        method: "GET",
+        originalUrl: "/test",
+        httpVersion: "1.1",
+        headers: {}
+    } as Request;
+    const mockResponse = {
+        statusCode : 200,
+        getHeader: jest.fn().mockReturnValue(100)
+    }as unknown as Response;
+    const timeTaken = 1000;
+    const logMessage = (middleware as any).generateLogMessage(mockRequest, mockResponse, timeTaken);
+    const expectedDate = moment().format('DD/MMM/YYYY:HH:mm:ss ZZ');
+    expect(logMessage).toContain('')
+    const header = mockRequest.headers["user-agent"];
+    expect(header).toBeUndefined();
 
+})
+})

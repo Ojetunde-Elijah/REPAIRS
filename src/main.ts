@@ -13,6 +13,7 @@ dotenv.config({ path: resolve(__dirname, '../.env') });
 const configService = new ConfigService()
 console.log(configService.getConfig())
 console.log(process.env.PRIVATE_KEY)
+console.log(process.env.MONGO_DB_URI)
 const NEST_LOGGING = false
 async function bootstrap() {
   const opts: NestApplicationOptions = { }
