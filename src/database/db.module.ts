@@ -18,21 +18,21 @@ export class DatabaseModule{
         }
         return {
             uri: dbdata,
-            connectionFactory: (connection)=>{
-                connection.on("connected",()=>{
-                    logger.log("MongoDb connected successfully")
-                    console.log("MongoDb connected successfully")
-                })
-                connection.on("disconnected",()=>{
-                    logger.warn("MongoDB connection error")
-                    console.log("Mongodb disconnected")
-                })
-                connection.on("error",()=>{
-                    logger.error("MOngoDB connection error")
-                    console.log("MongoDb error")
-                })
-                return connection
-            }   
+            // connectionFactory: (connection)=>{
+            //     connection.on("connected",()=>{
+            //         logger.log("MongoDb connected successfully")
+            //         console.log("MongoDb connected successfully")
+            //     })
+            //     connection.on("disconnected",()=>{
+            //         logger.warn("MongoDB connection error")
+            //         console.log("Mongodb disconnected")
+            //     })
+            //     connection.on("error",()=>{
+            //         logger.error("MOngoDB connection error")
+            //         console.log("MongoDb error")
+            //     })
+            //     return connection
+            // }   
         }
     }
 
@@ -43,12 +43,12 @@ export class DatabaseModule{
                 MongooseModule.forRootAsync({
                     imports: [ConfigModule],
                     useFactory:(configService: ConfigService, logger:Logger)=> DatabaseModule.getNoSqlConnectionOptions(configService,logger),
-                    inject: [ConfigService]
+                    inject: [ConfigService,Logger]
                 })
             ],
             controllers: [],
             providers: [],
-            exports: []
+            exports: [MongooseModule]
         }
     }
 }

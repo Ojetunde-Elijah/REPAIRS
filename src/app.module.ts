@@ -7,8 +7,11 @@ import { RateLimiterGuard } from './guard/rate-limiter.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule} from "src/config/config.module"
 import {DatabaseModule} from "src/database/db.module"
+import {LoggerModule} from "./logger/logger.module"
+import {TypeOrmModule} from "@nestjs/typeorm"
+import { DatabaseCredentials } from './mySql/mySql.service';
 @Module({
-  imports: [RedisConfigModule,ConfigModule, DatabaseModule.forRoot() ],
+  imports: [ConfigModule,LoggerModule,TypeOrmModule.forRoot(DatabaseCredentials),RedisConfigModule],
   controllers: [AppController],
   providers: [RedisService],
 })

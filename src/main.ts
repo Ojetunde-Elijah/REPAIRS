@@ -15,12 +15,15 @@ console.log(configService.getConfig())
 console.log(process.env.PRIVATE_KEY)
 console.log(process.env.MONGO_DB_URI)
 const NEST_LOGGING = false
+process.on("warning",(err)=>{
+  console.error("Warning",err)
+})
 async function bootstrap() {
   const opts: NestApplicationOptions = { }
   if(!NEST_LOGGING){
     opts.logger = false
   }
-
+  
   admin.initializeApp({
     credential: admin.credential.cert({
       privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
@@ -31,9 +34,20 @@ async function bootstrap() {
   })
   console.log("Firebase has started")
   const app = await NestFactory.create(AppModule,opts);
+  process.on("unhandledRejection",(err)=>{
+    console.error("Unhandled Rejection",err)  
+  })
+  process.on("uncaughtException",(err)=>{
+    console.error("Uncaught Exception",err)  
+  })
+
+
   SwaggerModule.setup("api/v1",app,createDocument(app))
   await app.listen(process.env.PORT ?? 3000);
   console.log("App has started")
 }
 export default admin
-bootstrap();
+bootstrap().catch((err)=>{
+  console.error("Error starting app",err)
+  process.exit(1)
+});
