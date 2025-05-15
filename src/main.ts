@@ -10,10 +10,15 @@ import { ConfigService } from './config/config.service';
 import * as dotenv from "dotenv"
 import {resolve} from "path"
 dotenv.config({ path: resolve(__dirname, '../.env') });
-const configService = new ConfigService()
-console.log(configService.getConfig())
-console.log(process.env.PRIVATE_KEY)
-console.log(process.env.MONGO_DB_URI)
+// const configService = new ConfigService()
+// console.log(configService.getConfig())
+// console.log(process.env.PRIVATE_KEY)
+// console.log(process.env.MONGO_DB_URI)
+const logger = new Logger(new ConfigService());
+logger.debug('DEBUG TEST');
+logger.log('LOG TEST');
+logger.warn('WARN TEST');
+logger.error('ERROR TEST');
 const NEST_LOGGING = false
 process.on("warning",(err)=>{
   console.error("Warning",err)
@@ -23,31 +28,41 @@ async function bootstrap() {
   if(!NEST_LOGGING){
     opts.logger = false
   }
-  
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      clientEmail: process.env.CLIENTEMAIL,
-      projectId: process.env.PROJECTID,
-    } as Partial<admin.ServiceAccount>),
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
-  })
-  console.log("Firebase has started")
-  const app = await NestFactory.create(AppModule,opts);
-  process.on("unhandledRejection",(err)=>{
-    console.error("Unhandled Rejection",err)  
-  })
-  process.on("uncaughtException",(err)=>{
-    console.error("Uncaught Exception",err)  
-  })
+  try {
+    console.log("Initializing Firebase...");
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        clientEmail: process.env.CLIENTEMAIL,
+        projectId: process.env.PROJECTID,
+      } as Partial<admin.ServiceAccount>),
+      databaseURL: process.env.FIREBASE_DATABASE_URL,
+    })
+    console.log("Firebase initialized successfully")
 
+    console.log("Creating Nest application")
+    const app = await NestFactory.create(AppModule);
+    process.on("unhandledRejection",(err)=>{
+      console.error("Unhandled Rejection",err)  
+    })
+    process.on("uncaughtException",(err)=>{
+      console.error("Uncaught Exception",err)  
+    })
 
-  SwaggerModule.setup("api/v1",app,createDocument(app))
-  await app.listen(process.env.PORT ?? 3000);
-  console.log("App has started")
-}
+    console.log("Setting up swagger...")
+    SwaggerModule.setup("api/v1",app,createDocument(app))
+    
+    const port = process.env.PORT || 3000
+    console.log(`Starting server on port ${port}`)
+    await app.listen(port);
+    console.log(`Application is running on: ${await app.getUrl()}`)
+  }catch(err){
+    if(err.code === "EADDRINUSE"){
+      console.error(`Port ${3000} is already in use`)
+    }
+    console.log(`Bootstrap failed: ${err}`)
+    process.exit(1)
+  }
+  }
 export default admin
-bootstrap().catch((err)=>{
-  console.error("Error starting app",err)
-  process.exit(1)
-});
+bootstrap()

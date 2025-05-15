@@ -21,6 +21,23 @@ import { ConfigService } from "../config/config.service";
                         connectTimeout: 10000, // 10 seconds
                     }
                 };
+                onClientReady: (client)=>{
+                    client.on("connect", ()=>{
+                        console.log("successfully connected to redis")
+                    })
+                    client.on("ready",()=>{
+                        console.log("Redis connection is ready")
+                    })
+                    client.on("reconnecting",()=>{
+                        console.log("Redis connection is reconnecting") 
+                    })
+                    client.on("error",()=>{
+                        console.log("Redis connection error")
+                    })
+                    client.on("end",()=>{
+                        console.log("Redis connection ended")
+                    })
+                }
                 }catch(error){
                     console.error("Error in RedisModule:", error);
                     return {

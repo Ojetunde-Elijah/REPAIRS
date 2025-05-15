@@ -9,8 +9,7 @@
     "build": "tsc -p tsconfig.build.json",
     "debug": "nodemon",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "ts-node -r tsconfig-paths/register --trace-warnings src/main.ts
-",
+    "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "prestart:prod": "rimraf dist && npm run build",
     "start:prod": "node dist/main.js",

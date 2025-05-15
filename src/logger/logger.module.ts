@@ -1,8 +1,9 @@
 import {Module,Global} from "@nestjs/common"
 import {Logger} from "./logger"
+import {ConfigModule} from "../config/config.module"
 @Global()
 @Module({
-    imports: [],
+    imports: [ConfigModule],
     providers: [Logger],
     exports: [Logger]
 })

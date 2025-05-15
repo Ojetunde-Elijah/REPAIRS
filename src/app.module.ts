@@ -11,7 +11,7 @@ import {LoggerModule} from "./logger/logger.module"
 import {TypeOrmModule} from "@nestjs/typeorm"
 import { DatabaseCredentials } from './mySql/mySql.service';
 @Module({
-  imports: [ConfigModule,LoggerModule,TypeOrmModule.forRoot(DatabaseCredentials),RedisConfigModule],
+  imports: [ConfigModule,LoggerModule,DatabaseModule.forRoot(),RedisConfigModule],
   controllers: [AppController],
   providers: [RedisService],
 })
