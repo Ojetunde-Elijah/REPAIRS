@@ -9,9 +9,11 @@ import { ConfigModule} from "src/config/config.module"
 import {DatabaseModule} from "src/database/db.module"
 import {LoggerModule} from "./logger/logger.module"
 import {TypeOrmModule} from "@nestjs/typeorm"
-import { DatabaseCredentials } from './mySql/mySql.service';
+import { DbModule } from './postgres/db.module';
+import { PrismaModule } from '../prisma/prisma.module';
+
 @Module({
-  imports: [ConfigModule,LoggerModule,DatabaseModule.forRoot(),RedisConfigModule],
+  imports: [ConfigModule,LoggerModule,PrismaModule,DatabaseModule.forRoot(),RedisConfigModule],
   controllers: [AppController],
   providers: [RedisService],
 })
