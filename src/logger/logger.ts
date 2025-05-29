@@ -3,7 +3,7 @@ import * as moment from "moment";
 import {MESSAGE} from "triple-beam"
 import * as winston from "winston"
 
-import { ConfigService } from "src/config/config.service";
+import { ConfigService } from "../config/config.service";
 // import { isLogLevel } from "./loglevel";
 import { Loglevel,isLogLevel } from "./loglevel";
 

@@ -1,11 +1,12 @@
 import {Module, DynamicModule} from '@nestjs/common';
-import { ConfigModule } from 'src/config/config.module';
-import { ConfigService } from 'src/config/config.service';
+import { ConfigModule } from '../config/config.module';
+import { ConfigService } from '../config/config.service';
 import {Logger} from "./../logger/logger"
 
 
 import { DbConnectionError, DbError } from './db.error';
 import { MongooseModuleOptions,MongooseModule } from '@nestjs/mongoose';
+import { LoggerModule } from '../logger/logger.module';
 
 @Module({})
 export class DatabaseModule{
@@ -40,14 +41,16 @@ export class DatabaseModule{
         return{
             module: DatabaseModule,
             imports: [
+                ConfigModule,
+                LoggerModule,
                 MongooseModule.forRootAsync({
-                    imports: [ConfigModule],
+                    imports: [ConfigModule,LoggerModule],
                     useFactory:(configService: ConfigService, logger:Logger)=> DatabaseModule.getNoSqlConnectionOptions(configService,logger),
                     inject: [ConfigService,Logger]
                 })
             ],
             controllers: [],
-            providers: [],
+            providers: [Logger,ConfigService],
             exports: [MongooseModule]
         }
     }

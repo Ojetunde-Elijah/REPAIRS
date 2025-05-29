@@ -8,5 +8,5 @@ export interface ConfigData{
     FirebasePrivateKey: string;
     FirebaseClientEmail: string;
     FirebaseProjectId: string;
-    MONGO_DB_URI: string
+    MONGO_DB_URI?: string
 }
