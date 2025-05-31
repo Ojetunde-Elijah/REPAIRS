@@ -1,7 +1,8 @@
 // Add Jest types for TypeScript
 // / <reference types="jest" />
 
-import {Test} from "@nestjs/testing";
+import { LoggerModule } from "../logger/logger.module";
+import {Test, TestingModule} from "@nestjs/testing";
 import {DatabaseModule} from "./db.module";
 import {ConfigService} from "../config/config.service";
 import { Logger } from "../logger/logger";
@@ -92,9 +93,10 @@ describe("forRoot", ()=>{
 
     })
     it("should properly configure async MongooseModule", async ()=>{
-        const moduleRef = await Test.createTestingModule({
+        const moduleRef: TestingModule = await Test.createTestingModule({
   imports: [
     MongooseModule.forRootAsync({
+        imports: [ConfigModule,LoggerModule],
       useFactory: (configService: ConfigService, logger: Logger) =>
         DatabaseModule.getNoSqlConnectionOptions(configService, logger),
       inject: [ConfigService, Logger]
