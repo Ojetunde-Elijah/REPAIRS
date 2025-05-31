@@ -1,5 +1,5 @@
 import { BaseNotificationDto } from "./notification.dto";
-
+import {IsEmail, IsString, MaxLength,IsBoolean,IsOptional} from "class-validator"
 export class EmailNotification extends BaseNotificationDto{
     @IsEmail()
     recipient: string;

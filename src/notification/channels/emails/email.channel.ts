@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import { NotificationChannel, NotificationType,NotificationResult } from "src/notification/inteerfaces/notification.channel";
+import { NotificationChannel, NotificationType,NotificationResult } from "../../inteerfaces/notification.channel";
 
 @Injectable()
 
