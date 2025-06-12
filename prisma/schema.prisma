@@ -13,7 +13,117 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model User {
-  id Int @id @default(autoincrement())
-  name String
+  id String @id @default(uuid())
+  firstName String
+  lastName String
   email String @unique
+  phone String?
+  password String?
+  role Role @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  devices Device[]
+  repairsAsCustomer Repair[] @relation("RepairCustomer")
+  repairsAsTechnician Repair[] @relation("RepairTechnician")
+  addresses Address[]
+}
+
+model Repair {
+  id String @id @default(uuid())
+  customerId String
+  customer User @relation(name: "RepairCustomer",fields: [customerId], references: [id])
+  technicianId String?
+  technician User? @relation(name: "RepairTechnician", fields: [technicianId], references:[id])
+  deviceId String
+  device Device @relation(fields: [deviceId], references: [id])
+  issue String
+  status RepairStatus @default(PENDING)
+  progress Int @default(0)
+  estimatedCost Float
+  actualCost Float?
+  bookingDate DateTime @default(now())
+  startDate DateTime?
+  completionDate DateTime?
+  locationId String
+  location Location @relation(fields: [locationId], references: [id])
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  logistics Logistics?
+}
+
+model Device {
+  id String @id @default(uuid())
+  type DeviceType
+  model String
+  brand String
+  imei String?
+  serialNumber String?
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  repairs Repair[]
+}
+
+model Location {
+  id String @id @default(uuid())
+  name String
+  address String
+  city String
+  state String
+  zipcode String
+  phone String
+  repairs Repair[]
+}
+
+model Logistics{
+  id String @id @default(uuid())
+  repairId String @unique
+  repair Repair @relation(fields: [repairId], references: [id])
+  status LogisticsStatus
+  currentLocation String
+  trackingNumber String?
+  estimatedArrival DateTime?
+  notes String?
+  updatedAt DateTime @updatedAt
+}
+
+model Address {
+  id String @id @default(uuid())
+  street String
+  city String
+  state String
+  postalCode String
+  country String
+  userId String
+  user User @relation(fields: [userId], references:[id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role{
+  CUSTOMER
+  TECHNICIAN
+  ADMIN
+}
+
+enum DeviceType {
+  PHONE
+  TABLET
+  LAPTOP
+  OTHER
+}
+
+enum RepairStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum LogisticsStatus {
+  RECEIVED
+  IN_TRANSIT
+  AT_FACILITY
+  READY_FOR_PICKUP
+  DELIVERED
 }
