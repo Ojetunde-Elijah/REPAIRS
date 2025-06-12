@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { NestApplicationOptions } from '@nestjs/common';
 import { AppModule } from './app.module';
 
-import * as admin from "firebase-admin"
 import { SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { createDocument } from './swagger/swagger';
@@ -40,17 +39,7 @@ async function bootstrap() {
     opts.logger = false
   }
   try {
-    logger.log("Initializing Firebase...");
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        clientEmail: process.env.CLIENTEMAIL,
-        projectId: process.env.PROJECTID,
-      } as Partial<admin.ServiceAccount>),
-      databaseURL: process.env.FIREBASE_DATABASE_URL,
-    })
-    logger.log("Firebase initialized successfully")
-
+    
     logger.log("Creating Nest application")
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     app.disable("x-powered-by")
@@ -82,5 +71,4 @@ async function bootstrap() {
     process.exit(1)
   }
   }
-export default admin
 bootstrap()

@@ -41,8 +41,6 @@ export class DatabaseModule{
         return{
             module: DatabaseModule,
             imports: [
-                ConfigModule,
-                LoggerModule,
                 MongooseModule.forRootAsync({
                     imports: [ConfigModule,LoggerModule],
                     useFactory:(configService: ConfigService, logger:Logger)=> DatabaseModule.getNoSqlConnectionOptions(configService,logger),
@@ -50,7 +48,7 @@ export class DatabaseModule{
                 })
             ],
             controllers: [],
-            providers: [Logger,ConfigService],
+            providers: [],
             exports: [MongooseModule]
         }
     }
