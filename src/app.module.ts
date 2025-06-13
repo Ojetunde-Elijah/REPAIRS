@@ -9,10 +9,11 @@ import { ConfigModule} from "./config/config.module"
 import {DatabaseModule} from "./database/db.module"
 import {LoggerModule} from "./logger/logger.module"
 import {TypeOrmModule} from "@nestjs/typeorm"
+import{AuthModule} from "./auth/auth.module"
 import { PrismaModule } from '../prisma/prisma.module';
 import { FireBaseModule } from './firebase/firebase.module';
 @Module({
-  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot()],
+  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot(),AuthModule,TypeOrmModule.forRoot(),RedisConfigModule],
   controllers: [],
   providers: [],
 })
