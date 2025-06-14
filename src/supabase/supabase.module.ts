@@ -19,6 +19,6 @@ import { SupabaseService } from "./supabase.service";
         },
         SupabaseService
     ],
-    exports: [SupabaseService]
+    exports: ["SUPABASE_CLIENT",SupabaseService]
 })
 export class SupabaseModule{}

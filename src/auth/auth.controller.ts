@@ -1,22 +1,35 @@
-import { HttpException, HttpStatus, Injectable, NestMiddleware } from "@nestjs/common";
-import { NextFunction, Request, Response } from "express";
-import { FirebaseAuthService } from "src/services/firebase.service";
+import {Controller,Post,Body,Headers,UseInterceptors} from "@nestjs/common"
+import { SupabaseService } from "../supabase/supabase.service";
+import { WebhookInterceptor } from "./webhook.interceptor";
 
-@Injectable()
-export class AuthMiddleware implements NestMiddleware{
-    constructor(private readonly firebaseService: FirebaseAuthService){}
-    public async use(req: Request, res:Response, next: NextFunction){
-        try {
-            const {authorization} = req.headers;
-            if(!authorization){
-                throw new HttpException({message: "missing authorization header"}, HttpStatus.BAD_REQUEST)
-            }
-            const user = await this.firebaseService.authenticate(authorization)
-            console.log(user);
-            req.user = user;
-            next()
-        } catch (error) {
-            throw new HttpException({message: "Invalid token"},HttpStatus.BAD_REQUEST)
+@Controller("auth")
+export class AuthController {
+    constructor(private readonly supabase: SupabaseService){}
+    @Post("webhook")
+    @UseInterceptors(WebhookInterceptor)
+    async handleAuthWebhook(@Body() body: any){
+        const {type, user} = body;
+
+        switch(type){
+            case "user.created":
+                await this.handleUserCreated(user);
+                break;
+            case "user.updated":
+                await this.handleUserUpdated(user);
+                break;
+            case "user.deleted":
+                await this.handleUserDeleted(user);
+                break;
         }
+        
+    }   
+    private async handleUserCreated(user: any){
+            console.log("New user created:", user)
+        }
+    private async handleUserUpdated(user: any){
+        console.log("User updated:", user)
+    }
+    private async handleUserDeleted(user: any){
+        console.log("User Deleted:", user)
     }
 }

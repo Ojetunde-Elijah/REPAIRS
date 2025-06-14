@@ -13,7 +13,7 @@ import{AuthModule} from "./auth/auth.module"
 import { PrismaModule } from '../prisma/prisma.module';
 import { FireBaseModule } from './firebase/firebase.module';
 @Module({
-  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot(),AuthModule,TypeOrmModule.forRoot(),RedisConfigModule],
+  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot(),AuthModule],
   controllers: [],
   providers: [],
 })
