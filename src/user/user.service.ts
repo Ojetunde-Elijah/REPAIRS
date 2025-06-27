@@ -39,4 +39,10 @@ async updateUser(supabaseUser: any){
             where: { id: userId }
         });
     }
+
+    async findByEmail(email: string) {
+        return this.prisma.user.findUnique({
+            where: { email },
+        });
+    }
 }

@@ -4,10 +4,15 @@ import {UserService} from "../user/user.service";
 import {PrismaService} from "../../prisma/prisma.service";
 import{SupabaseService} from "../supabase/supabase.service";
 import {SupabaseModule} from "../supabase/supabase.module";
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
 @Module({
-    imports:[SupabaseModule],
+    imports:[SupabaseModule, JwtModule.register({
+        secret: process.env.JWT_SECRET || 'supersecret',
+        signOptions: { expiresIn: '1d' },
+    })],
     controllers:[ AuthController],
-    providers: [UserService, PrismaService, SupabaseService],
-    exports: [UserService, PrismaService, SupabaseService]
+    providers: [UserService, PrismaService, SupabaseService, JwtStrategy],
+    exports: [UserService, PrismaService, SupabaseService, JwtModule]
 })
 export class AuthModule {}
