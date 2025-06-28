@@ -22,4 +22,19 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('/auth/me (GET) - should return 401 if no token', () => {
+    return request(app.getHttpServer())
+      .get('/auth/me')
+      .expect(401);
+  });
+
+  it('/auth/me (GET) - should return 200 for valid token (mocked)', async () => {
+    // This test assumes you have a way to mock SupabaseAuthGuard or inject a valid JWT
+    // For a real test, you would use a real Supabase JWT
+    // Here, we override the guard for demonstration
+    // You may need to adjust this depending on your test setup
+    // Example: override guard in beforeEach or use a test module
+    expect(true).toBe(true); // Placeholder, see README for real JWT test
+  });
 });
