@@ -45,4 +45,9 @@ async updateUser(supabaseUser: any){
             where: { email },
         });
     }
+
+    async getUserById(id: string) {
+        // TODO: Replace with real DB lookup
+        return { id, email: 'admin@example.com', role: 'admin' };
+    }
 }

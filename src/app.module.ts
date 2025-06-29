@@ -12,8 +12,10 @@ import {TypeOrmModule} from "@nestjs/typeorm"
 import{AuthModule} from "./auth/auth.module"
 import { PrismaModule } from '../prisma/prisma.module';
 import { FireBaseModule } from './firebase/firebase.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { RepairsModule } from './repair/repair.module';
 @Module({
-  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot(),AuthModule],
+  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot(),AuthModule,DashboardModule,RepairsModule],
   controllers: [],
   providers: [],
 })

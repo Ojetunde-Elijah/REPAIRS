@@ -1,7 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import axios from 'axios';
+import { PrismaClient, Role } from '@prisma/client';
 
+const prisma = new PrismaClient();
 const SUPABASE_JWKS_URL = 'https://process.env.SUPABASE_PROJECTID.supabase.co/auth/v1/keys'; // Replace with your Supabase project URL
 
 @Injectable()
@@ -37,8 +39,21 @@ export class SupabaseAuthGuard implements CanActivate {
     const cert = `-----BEGIN CERTIFICATE-----\n${pubkey}\n-----END CERTIFICATE-----`;
 
     try {
-      const payload = jwt.verify(token, cert, { algorithms: ['RS256'] });
-      req.user = payload;
+      const payload: any = jwt.verify(token, cert, { algorithms: ['RS256'] });
+      // Check if user exists in DB
+      let user = await prisma.user.findUnique({ where: { email: payload.email } });
+      if (!user) {
+        // Create user if not exists
+        user = await prisma.user.create({
+          data: {
+            email: payload.email,
+            firstName: payload.firstName || '',
+            lastName: payload.lastName || '',
+            role: payload.role || Role.CUSTOMER,
+          },
+        });
+      }
+      req.user = user;
       return true;
     } catch (err) {
       throw new UnauthorizedException('Token verification failed');
