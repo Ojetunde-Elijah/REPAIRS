@@ -35,4 +35,33 @@ export class DashboardService {
       revenue,
     };
   }
+
+  async getAdminDashboardData() {
+    // Total bookings (all repairs)
+    const totalBookings = await prisma.repair.count();
+
+    // In progress repairs
+    const inProgress = await prisma.repair.count({
+      where: { status: RepairStatus.IN_PROGRESS },
+    });
+
+    // Completed repairs
+    const completed = await prisma.repair.count({
+      where: { status: RepairStatus.COMPLETED },
+    });
+
+    // Revenue from completed repairs
+    const revenueResult = await prisma.repair.aggregate({
+      where: { status: RepairStatus.COMPLETED },
+      _sum: { actualCost: true },
+    });
+    const revenue = revenueResult._sum.actualCost || 0;
+
+    return {
+      totalBookings,
+      inProgress,
+      completed,
+      revenue,
+    };
+  }
 } 

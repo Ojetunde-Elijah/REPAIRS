@@ -6,11 +6,12 @@ import { ConfigService } from "../config/config.service";
 import {createClient} from "@supabase/supabase-js";
 import { SupabaseService } from "./supabase.service";
 
+export const SUPABASE_CLIENT = "SUPABASE_CLIENT";
 @Module({
     imports: [ConfigModule],
     providers: [
         {
-            provide: "SUPABASE_CLIENT",
+            provide: SUPABASE_CLIENT,
             useFactory: (config: ConfigService)=> createClient(
                 config.getConfig().SUPABASE_URL,
                 config.getConfig().SUPABASE_KEY
@@ -19,6 +20,6 @@ import { SupabaseService } from "./supabase.service";
         },
         SupabaseService
     ],
-    exports: ["SUPABASE_CLIENT",SupabaseService]
+    exports: [SUPABASE_CLIENT,SupabaseService]
 })
 export class SupabaseModule{}
