@@ -9,6 +9,7 @@ export class ConfigService{
 
     constructor(data: ConfigData = DEFAULT_CONFIG){
         this.config = data;
+        this.loadingUsingDotEnv();
     }
 
     public loadingUsingDotEnv(){
