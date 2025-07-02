@@ -7,8 +7,8 @@ import {ConfigData} from "./config.interface";
 export class ConfigService{
     private config: ConfigData
 
-    constructor(data: ConfigData = DEFAULT_CONFIG){
-        this.config = data;
+    constructor(){
+        this.config = {} as ConfigData;
         this.loadingUsingDotEnv();
     }
 

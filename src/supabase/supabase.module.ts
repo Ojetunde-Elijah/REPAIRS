@@ -6,7 +6,7 @@ import { ConfigService } from "../config/config.service";
 import {createClient} from "@supabase/supabase-js";
 import { SupabaseService } from "./supabase.service";
 
-export const SUPABASE_CLIENT = "SUPABASE_CLIENT";
+import { SUPABASE_CLIENT } from "./supabase.constant";
 @Module({
     imports: [ConfigModule],
     providers: [
