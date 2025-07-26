@@ -16,7 +16,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { RepairsModule } from './repair/repair.module';
 import { SupabaseModule } from './supabase/supabase.module';
 @Module({
-  imports: [ConfigModule,LoggerModule,FireBaseModule,PrismaModule,DatabaseModule.forRoot(),AuthModule,DashboardModule,RepairsModule,SupabaseModule],
+  imports: [ConfigModule,LoggerModule,PrismaModule,AuthModule,DashboardModule,RepairsModule,SupabaseModule],
   controllers: [],
   providers: [],
 })

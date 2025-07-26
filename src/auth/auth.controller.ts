@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards, Req, Logger } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Logger, Post, Res, UseInterceptors } from '@nestjs/common';
 import { SupabaseAuthGuard } from './supabase-auth.guard';
 import { UserService } from '../user/user.service';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { WebhookInterceptor } from './webhook.interceptor';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -48,5 +49,13 @@ export class AuthController {
       this.logger.error(`Error syncing user ${supabaseUser.email}:`, error);
       throw error;
     }
+  }
+
+  @Post('webhook')
+  @UseInterceptors(WebhookInterceptor)
+  async handleSupabaseWebhook(@Req() req, @Res() res) {
+    this.logger.log('Received Supabase Auth webhook:', req.body);
+    // You can add custom logic here to process the webhook event
+    return res.status(200).send({ received: true });
   }
 }

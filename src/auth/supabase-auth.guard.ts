@@ -4,7 +4,7 @@ import axios from 'axios';
 import { PrismaClient, Role } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const SUPABASE_JWKS_URL = 'https://process.env.SUPABASE_PROJECTID.supabase.co/auth/v1/keys'; // Replace with your Supabase project URL
+const SUPABASE_JWKS_URL = `https://process.env.SUPABASE_PROJECTID.supabase.co/auth/v1/keys`; // Replace with your Supabase project URL
 
 @Injectable()
 export class SupabaseAuthGuard implements CanActivate {
